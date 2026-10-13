@@ -470,6 +470,13 @@ COOKING_ENTITY_DESCRIPTIONS: _EntityDescriptionsDefinitionsType = {
         ),
     ],
     "select": [
+        # Enumeration of the appliance: "Off", "15dC" ... "99dC" and "59dF" ... "210dF".
+        # The values are not translatable states, so has_state_translation stays False and the
+        # options are taken unchanged from the appliance (uid 5144 on Gaggenau BS474112).
+        HCSelectEntityDescription(
+            key="select_oven_meatprobe_temperature",
+            entity="Cooking.Oven.Option.MeatProbeTemperatureV2",
+        ),
         HCSelectEntityDescription(
             key="select_oven_level",
             entity="Cooking.Oven.Option.Level",
@@ -610,5 +617,14 @@ COOKING_ENTITY_DESCRIPTIONS: _EntityDescriptionsDefinitionsType = {
             entity_category=EntityCategory.CONFIG,
         ),
     ],
-    "binary_sensor": [],
+    "binary_sensor": [
+        # Event of the oven: Off / Present / Confirmed. Seen on Gaggenau BO470112 and BS474112
+        # as uid 53260, value null until the oven has finished preheating.
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_preheat_finished",
+            entity="Cooking.Common.Event.PreheatFinished",
+            value_on={"Present", "Confirmed"},
+            value_off={"Off"},
+        ),
+    ],
 }

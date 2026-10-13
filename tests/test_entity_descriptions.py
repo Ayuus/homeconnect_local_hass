@@ -322,3 +322,26 @@ def test_descriptions_have_english_name() -> None:
                 missing.append(f"{domain}.{key}")
 
     assert sorted(set(missing)) == []
+
+
+def test_oven_preheat_finished_and_meatprobe_descriptions() -> None:
+    """Test oven PreheatFinished binary sensor and MeatProbeTemperatureV2 select exist."""
+    descriptions = entity_descriptions.get_all_entity_description()
+
+    preheat = next(
+        d
+        for d in descriptions["binary_sensor"]
+        if not callable(d) and d.key == "binary_sensor_oven_preheat_finished"
+    )
+    assert preheat.entity == "Cooking.Common.Event.PreheatFinished"
+    assert preheat.value_on == {"Present", "Confirmed"}
+    assert preheat.value_off == {"Off"}
+
+    meatprobe = next(
+        d
+        for d in descriptions["select"]
+        if not callable(d) and d.key == "select_oven_meatprobe_temperature"
+    )
+    assert meatprobe.entity == "Cooking.Oven.Option.MeatProbeTemperatureV2"
+    # Options are taken as-is from the appliance, they are not translatable states
+    assert meatprobe.has_state_translation is False
