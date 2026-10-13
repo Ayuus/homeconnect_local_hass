@@ -3318,9 +3318,6 @@
           "plus3": "Plus 3"
         }
       },
-      "select_oven_meatprobe_temperature": {
-        "name": "Meatprobe Temperature"
-      },
       "select_oven_level": {
         "name": "Level",
         "state": {
