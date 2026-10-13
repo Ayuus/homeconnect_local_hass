@@ -461,6 +461,9 @@
       },
       "binary_sensor_alarm_clock_elapsed": {
         "name": "Alarm Clock Elapsed"
+      },
+      "binary_sensor_oven_preheat_finished": {
+        "name": "Preheat Finished"
       }
     },
     "sensor": {
@@ -3314,6 +3317,9 @@
           "plus2": "Plus 2",
           "plus3": "Plus 3"
         }
+      },
+      "select_oven_meatprobe_temperature": {
+        "name": "Meatprobe Temperature"
       },
       "select_oven_level": {
         "name": "Level",
