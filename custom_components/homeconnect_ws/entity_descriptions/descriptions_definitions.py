@@ -79,7 +79,7 @@ class HCBinarySensorEntityDescription(
     """Description for Binary Sensor Entity."""
 
     value_on: set[str] | None = None
-    value_off: set[str] | None = None
+    value_off: set[str | None] | None = None
     available_access: tuple[Access] = (Access.READ, Access.READ_WRITE)
     # Name of the alarm clock setting of the appliance, for `entity` an alarm clock event. Ignored
     # when the appliance does not have this entity. Some ovens leave the event on after the alarm
