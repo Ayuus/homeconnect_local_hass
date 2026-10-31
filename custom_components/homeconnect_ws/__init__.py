@@ -88,7 +88,7 @@ type HCConfigEntry = ConfigEntry[HCData]
 HC_KEY: HassKey[HCConfig] = HassKey(DOMAIN)
 
 
-async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:  # noqa: PLR0915
     """Set up integration global config."""
     hass.data.setdefault(DOMAIN, HCConfig())
     if DOMAIN in config:
