@@ -17,6 +17,7 @@ from .helpers import (
     create_entities,
     error_decorator,
     leaves_alarm_event_on,
+    valid_program_options,
 )
 
 if TYPE_CHECKING:
@@ -156,4 +157,7 @@ class HCStartButton(HCEntity, ButtonEntity):
 
     @error_decorator
     async def async_press(self) -> None:
-        await self._runtime_data.appliance.selected_program.start()
+        program = self._runtime_data.appliance.selected_program
+        # Only send the options the appliance accepts, see valid_program_options.
+        options = valid_program_options(program, self._runtime_data.appliance.info.get("brand", ""))
+        await program.start(options=options, override_options=True)
