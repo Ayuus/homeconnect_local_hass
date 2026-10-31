@@ -6,6 +6,7 @@ import re
 import sys
 from typing import TYPE_CHECKING
 
+from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.number import NumberDeviceClass, NumberMode
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.components.switch import SwitchDeviceClass
@@ -657,6 +658,12 @@ COOKING_ENTITY_DESCRIPTIONS: _EntityDescriptionsDefinitionsType = {
             entity="Cooking.Common.Event.PreheatFinished",
             value_on={"Present", "Confirmed"},
             value_off={"Off", None},
+        ),
+        # Gaggenau BO470112 and BS474112 (uid 4100): true when the meat probe is plugged in.
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_meatprobe_plugged",
+            entity="Cooking.Oven.Status.MeatprobePlugged",
+            device_class=BinarySensorDeviceClass.PLUG,
         ),
     ],
 }
