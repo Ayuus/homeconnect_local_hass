@@ -18,6 +18,7 @@ from custom_components.homeconnect_ws.entity_descriptions import (
     HCSwitchEntityDescription,
 )
 from custom_components.homeconnect_ws.entity_descriptions.common import (
+    generate_child_lock_sensor,
     generate_power_switch,
     generate_program,
     wifi_signal_strength_dbm,
@@ -173,6 +174,60 @@ async def test_power_switch_read_only(mock_homeconnect_appliance: MockApplianceT
     appliance = await mock_homeconnect_appliance(description=device_description)
 
     assert generate_power_switch(appliance) == {}
+
+
+# Gaggenau hob CI282102: the child lock has access read
+CHILD_LOCK_READ_ONLY = DeviceDescription(
+    setting=[
+        EntityDescription(
+            uid=524,
+            name="BSH.Common.Setting.ChildLock",
+            access=Access.READ,
+            available=True,
+        ),
+    ]
+)
+
+
+async def test_child_lock_sensor_for_read_only_child_lock(
+    mock_homeconnect_appliance: MockApplianceType,
+) -> None:
+    """Test a child lock that can not be changed gets a binary sensor."""
+    appliance = await mock_homeconnect_appliance(description=CHILD_LOCK_READ_ONLY)
+    # The entities are created before the appliance is connected: there is no value yet
+    assert appliance.entities["BSH.Common.Setting.ChildLock"].value is None
+
+    description = generate_child_lock_sensor(appliance)
+
+    assert description is not None
+    assert description.key == "binary_sensor_child_lock"
+    assert description.entity == "BSH.Common.Setting.ChildLock"
+
+
+async def test_child_lock_sensor_not_for_writable_child_lock(
+    mock_homeconnect_appliance: MockApplianceType,
+) -> None:
+    """Test no binary sensor when the child lock can be changed (it has a switch)."""
+    child_lock = DeviceDescription(
+        setting=[
+            EntityDescription(
+                uid=524,
+                name="BSH.Common.Setting.ChildLock",
+                access=Access.READ_WRITE,
+                available=True,
+            ),
+        ]
+    )
+    appliance = await mock_homeconnect_appliance(description=child_lock)
+
+    assert generate_child_lock_sensor(appliance) is None
+
+
+async def test_child_lock_sensor_missing(mock_homeconnect_appliance: MockApplianceType) -> None:
+    """Test no binary sensor when the appliance has no child lock."""
+    appliance = await mock_homeconnect_appliance(description=DeviceDescription())
+
+    assert generate_child_lock_sensor(appliance) is None
 
 
 PROGRAM = DeviceDescription(

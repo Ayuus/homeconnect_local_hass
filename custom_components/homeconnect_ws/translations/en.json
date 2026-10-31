@@ -254,6 +254,9 @@
       "binary_sensor_oven_meatprobe_plugged": {
         "name": "Meat probe plugged in"
       },
+      "binary_sensor_child_lock": {
+        "name": "Child lock"
+      },
       "binary_sensor_door_state": {
         "name": "Door"
       },
