@@ -132,6 +132,9 @@ class HCNumberEntityDescription(
     # With use_raw_value: values below this limit are written as 0 (the "Off" entry of the
     # enumeration), because the enumeration has no entries between 0 and this limit.
     raw_value_off_below: int | None = None
+    # (step, brands): the step to use for appliances of these brands (in capitals, as the
+    # appliance reports them), instead of the step the appliance reports.
+    step_for_brands: tuple[float, set[str]] | None = None
 
 
 class HCLightEntityDescription(HCEntityDescription, LightEntityDescription, frozen_or_thawed=True):
