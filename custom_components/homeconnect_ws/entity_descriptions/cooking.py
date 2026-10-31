@@ -665,5 +665,77 @@ COOKING_ENTITY_DESCRIPTIONS: _EntityDescriptionsDefinitionsType = {
             entity="Cooking.Oven.Status.MeatprobePlugged",
             device_class=BinarySensorDeviceClass.PLUG,
         ),
+        # Events of Gaggenau BO470112 / BS474112 (Off / Present / Confirmed). The appliance
+        # reports null (None) until an event occurred for the first time; that is off.
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_lock_while_cooling_down",
+            entity="Cooking.Oven.Event.OvenLockWhileCoolingDown",
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_cavity_temperature_too_high",
+            entity="Cooking.Oven.Event.CavityTemperatureTooHigh",
+            device_class=BinarySensorDeviceClass.PROBLEM,
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_user_interaction_required",
+            entity="Cooking.Oven.Event.UserInteractionRequired",
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_cavity_heatup",
+            entity="Cooking.Oven.Event.CavityHeatup",
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_operating_time_limit_reached",
+            entity="Cooking.Oven.Event.OperatingTimeLimitReached",
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_cleaning_request",
+            entity="Cooking.Oven.Event.CleaningRequest",
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_force_flushing",
+            entity="Cooking.Oven.Event.ForceFlushing",
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_descaling_request",
+            entity="Cooking.Oven.Event.DescalingRequest",
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_empty_water_container",
+            entity="Cooking.Oven.Event.EmptyWaterContainer",
+            device_class=BinarySensorDeviceClass.PROBLEM,
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_oven_water_supply_closed",
+            entity="Cooking.Oven.Event.WaterSupplyClosed",
+            device_class=BinarySensorDeviceClass.PROBLEM,
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
+        HCBinarySensorEntityDescription(
+            key="binary_sensor_cooking_appliance_module_error",
+            entity="Cooking.Common.Event.ApplianceModuleError",
+            device_class=BinarySensorDeviceClass.PROBLEM,
+            value_on={"Present", "Confirmed"},
+            value_off={"Off", None},
+        ),
     ],
 }
