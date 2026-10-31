@@ -247,6 +247,15 @@ COMMON_ENTITY_DESCRIPTIONS: _EntityDescriptionsDefinitionsType = {
             alarm_clock_entity="BSH.Common.Setting.AlarmClock",
             alarm_state="running",
         ),
+        # Stopwatch commands (uid 573 and 574).
+        HCButtonEntityDescription(
+            key="button_stopwatch_start_pause_resume",
+            entity="BSH.Common.Command.StopWatchStartPauseResume",
+        ),
+        HCButtonEntityDescription(
+            key="button_stopwatch_reset",
+            entity="BSH.Common.Command.StopWatchReset",
+        ),
     ],
     "binary_sensor": [
         HCBinarySensorEntityDescription(
@@ -414,6 +423,20 @@ COMMON_ENTITY_DESCRIPTIONS: _EntityDescriptionsDefinitionsType = {
             entity="BSH.Common.Option.EnergyForecast",
             native_unit_of_measurement=PERCENTAGE,
             entity_category=EntityCategory.DIAGNOSTIC,
+        ),
+        # Stopwatch of Gaggenau BO470112 / BS474112: time in seconds (uid 571) and state
+        # Off / Running / Paused (uid 572).
+        HCSensorEntityDescription(
+            key="sensor_stopwatch_time",
+            entity="BSH.Common.Status.StopWatchTime",
+            device_class=SensorDeviceClass.DURATION,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
+        ),
+        HCSensorEntityDescription(
+            key="sensor_stopwatch_state",
+            entity="BSH.Common.Status.StopWatchState",
+            device_class=SensorDeviceClass.ENUM,
+            has_state_translation=True,
         ),
         HCSensorEntityDescription(
             key="sensor_operation_state",
