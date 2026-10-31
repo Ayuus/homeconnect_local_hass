@@ -464,6 +464,15 @@ COOKING_ENTITY_DESCRIPTIONS: _EntityDescriptionsDefinitionsType = {
             # Gaggenau BO470112 reports a step of 1, but rounds up to a multiple of 5: a
             # requested 141 was reported back as 145, 140 stayed 140 (seen in a debug log).
             step_for_brands=(5, {"GAGGENAU"}),
+            # Gaggenau BO470112: the oven answers "WriteRequest Busy" (516) while it is operated
+            # on the oven itself (LocalControlActive). Reported on the issue: it can also only be
+            # set while the oven is switched on. Only applied to Gaggenau, other brands were not
+            # tried.
+            available_when=[
+                ("BSH.Common.Setting.PowerState", {"On"}),
+                ("BSH.Common.Status.LocalControlActive", {False}),
+            ],
+            available_when_brands={"GAGGENAU"},
             mode=NumberMode.AUTO,
         ),
         HCNumberEntityDescription(
