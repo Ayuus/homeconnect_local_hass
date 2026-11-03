@@ -651,7 +651,9 @@
         "name": "Active Program",
         "state": {
           "dishcare_dishwasher_program_intensiv70": "Intensiv 70",
+          "dishcare_dishwasher_program_auto1": "Auto 1",
           "dishcare_dishwasher_program_auto2": "Auto 2",
+          "dishcare_dishwasher_program_auto3": "Auto 3",
           "dishcare_dishwasher_program_eco50": "Eco 50",
           "dishcare_dishwasher_program_quick45": "Quick 45",
           "dishcare_dishwasher_program_prerinse": "PreRinse",
@@ -2168,7 +2170,9 @@
         "name": "Selected Program",
         "state": {
           "dishcare_dishwasher_program_intensiv70": "Intensiv 70",
+          "dishcare_dishwasher_program_auto1": "Auto 1",
           "dishcare_dishwasher_program_auto2": "Auto 2",
+          "dishcare_dishwasher_program_auto3": "Auto 3",
           "dishcare_dishwasher_program_eco50": "Eco 50",
           "dishcare_dishwasher_program_quick45": "Quick 45",
           "dishcare_dishwasher_program_prerinse": "PreRinse",
