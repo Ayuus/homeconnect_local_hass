@@ -1,4 +1,4 @@
-"""Tests for leaving out switch, select and number of settings that can not be changed."""
+"""Tests for hiding switch, select and number of settings that can not be changed (yet)."""
 
 from __future__ import annotations
 
@@ -39,15 +39,26 @@ def _keys(descriptions: list) -> set[str]:
     return {description.key for description in descriptions}
 
 
-async def test_read_only_setting_has_no_switch_or_select(
+def _hidden(descriptions: list) -> dict[str, bool]:
+    """Map the key of each description to: hidden by default."""
+    return {d.key: d.entity_registry_visible_default is False for d in descriptions}
+
+
+async def test_read_only_setting_is_hidden(
     mock_homeconnect_appliance: MockApplianceType,
 ) -> None:
-    """A power state that is read only (Gaggenau oven and hob) has only the sensor."""
+    """
+    A power state that is read only (Gaggenau oven and hob) keeps its switch, hidden.
+
+    The access can change while the appliance runs (descriptionChange), so the entity has to
+    exist to start working then. Only the visibility by default is turned off.
+    """
     appliance = await mock_homeconnect_appliance(description=_description(Access.READ))
 
     available = entity_descriptions.get_available_entities(appliance)
 
-    assert "switch_power_state" not in _keys(available["switch"])
+    # Only one of switch and select for the power state (the select only repeats the switch)
+    assert _hidden(available["switch"]).get("switch_power_state") is True
     assert "select_power_state" not in _keys(available["select"])
     assert "sensor_power_state" in _keys(available["sensor"])
 
@@ -60,15 +71,15 @@ async def test_writable_setting_keeps_switch(
 
     available = entity_descriptions.get_available_entities(appliance)
 
-    assert "switch_power_state" in _keys(available["switch"])
+    assert _hidden(available["switch"]).get("switch_power_state") is False
 
 
 async def test_read_only_option_keeps_number(
     mock_homeconnect_appliance: MockApplianceType,
 ) -> None:
-    """An option is left in: its access changes with the selected program."""
+    """An option is not hidden: its access changes with the selected program."""
     appliance = await mock_homeconnect_appliance(description=_description(Access.READ))
 
     available = entity_descriptions.get_available_entities(appliance)
 
-    assert "number_start_in" in _keys(available["number"])
+    assert _hidden(available["number"]).get("number_start_in") is False

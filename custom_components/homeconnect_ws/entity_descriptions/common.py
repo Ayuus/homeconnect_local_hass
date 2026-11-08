@@ -84,11 +84,9 @@ def generate_power_switch(appliance: HomeAppliance) -> EntityDescriptions:
     """Get Power switch description."""
     entity_descriptions = EntityDescriptions()
     if entity := appliance.entities.get("BSH.Common.Setting.PowerState"):
-        if entity.access not in (Access.READ_WRITE, Access.WRITE_ONLY):
-            # The appliance does not allow to change the power state (for example the
-            # Gaggenau BO470112 and BS474112 report it as read only), a switch or select
-            # would always be unavailable. The read only sensor_power_state shows the state.
-            return entity_descriptions
+        # A read only power state (for example the Gaggenau BO470112, BS474112 and CI282102)
+        # also gets a switch or select. `get_available_entities` hides it by default, the
+        # access can change later (descriptionChange) and the entity must exist to work then.
         if entity.min and entity.max:
             # has min/max
             settable_states = set()
