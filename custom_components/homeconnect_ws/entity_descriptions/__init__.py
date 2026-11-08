@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from dataclasses import replace
 from typing import TYPE_CHECKING
 
 from homeconnect_websocket.entities import Setting
@@ -37,8 +36,7 @@ if TYPE_CHECKING:
 ALL_ENTITY_DESCRIPTIONS: _EntityDescriptionsDefinitionsType | None = None
 
 # Entities that change a value. When the setting is read only in the description of the appliance
-# they are created hidden (see `_is_read_only_setting`): the access of a setting can change while
-# the appliance is running (descriptionChange), so the entity must exist to start working then.
+# they would always be unavailable, so they are not created (see `_is_read_only_setting`).
 WRITING_ENTITY_TYPES = ("switch", "select", "number")
 
 
@@ -60,14 +58,12 @@ def _is_read_only_setting(appliance: HomeAppliance, description: HCEntityDescrip
     """
     Check if the entity of the description is a setting that the appliance does not let us change.
 
-    This is the access at the moment: it can change later, via a descriptionChange message.
     Only settings are checked. The access of options and commands changes with the selected
     program and the state of the appliance (for example `StartInRelative` of a dishwasher is read
     only until a program is selected, `AbortProgram` has no access until a program runs), so those
-    can not be hidden based on the description. The access of a setting that is read only in the
-    description (for example `PowerState` of a Gaggenau oven or hob, `ChildLock` of the hob) did
-    not change in the profiles and diagnostics that were checked, but a descriptionChange can
-    change it, so such an entity is only hidden by default, not left out.
+    can not be left out based on the description. The access of a setting that is read only in the
+    description (for example `PowerState` of a Gaggenau oven or hob, `ChildLock` of the hob) is
+    the same for the whole life of the appliance in all profiles that were checked.
     """
     if not description.entity or not description.available_access:
         return False
@@ -113,15 +109,12 @@ def get_available_entities(appliance: HomeAppliance) -> EntityDescriptions:
                     all_subscribed_entities.update(description.entities)
                 if appliance_entities.issuperset(all_subscribed_entities):
                     available_entities[description_type].append(description)
-    # Also for the dynamic descriptions: switch, select and number of a read only setting are
-    # created, but hidden by default. The entity stays (unavailable) while the setting is read
-    # only and works as soon as the appliance allows to change it. The user can unhide it.
+    # Also for the dynamic descriptions: switch, select and number of a read only setting
     for description_type in WRITING_ENTITY_TYPES:
         available_entities[description_type] = [
-            replace(description, entity_registry_visible_default=False)
-            if _is_read_only_setting(appliance, description)
-            else description
+            description
             for description in available_entities[description_type]
+            if not _is_read_only_setting(appliance, description)
         ]
     return available_entities
 

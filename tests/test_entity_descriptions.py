@@ -165,7 +165,7 @@ async def test_power_switch(mock_homeconnect_appliance: MockApplianceType) -> No
 
 
 async def test_power_switch_read_only(mock_homeconnect_appliance: MockApplianceType) -> None:
-    """Test the Power switch is described for a read only power state (it is hidden later)."""
+    """Test no Power switch or select when the power state is read only."""
     device_description = copy.deepcopy(POWER_SWITCH)
     # reported by the Gaggenau BO470112 and BS474112
     device_description["setting"][0]["access"] = "read"
@@ -173,11 +173,7 @@ async def test_power_switch_read_only(mock_homeconnect_appliance: MockApplianceT
     device_description["setting"][0]["max"] = 3
     appliance = await mock_homeconnect_appliance(description=device_description)
 
-    descriptions = generate_power_switch(appliance)
-
-    # The switch exists (the access can change later); `get_available_entities` hides it
-    assert [d.key for d in descriptions.get("switch", [])] == ["switch_power_state"]
-    assert "select" not in descriptions
+    assert generate_power_switch(appliance) == {}
 
 
 # Gaggenau hob CI282102: the child lock has access read
